@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo} from 'react';
+import React, { useState, useEffect, useMemo, useCallback} from 'react';
+import { useRef } from 'react';
 import './App.css';
 
 
@@ -10,18 +11,24 @@ function App() {
     avatar_url :string
   }
 
-  const [user , setUser] = useState<[Iuser]>()   //<[user]> Para setar uma tipagem de array
+  const [users , setUsers] = useState<[Iuser]>()   //<[user]> Para setar uma tipagem de array
   
-  const names = user
+  const names = useMemo( () => users?.map(user => user.name).join(",") || "" , [users] )
+
+  const inputRef = useRef<HTMLInputElement>(null)    //useReftem que setar como nulo
+
+  const greeting = useCallback( (user : Iuser) => {
+    alert(`HEllo ${user.name}`)
+  }, [names] )
 
   async function loadData(){
     const response = await fetch('https://api.github.com/users/delei09')
     const data = await response.json()
-    setUser(data)
+    setUsers(data)
   }
   return (
     <div className="App">
-        {user?.name}
+        <input type = 'text' ref = {inputRef}  />
     </div>
   );
 }
