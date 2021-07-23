@@ -1,24 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect, useMemo} from 'react';
 import './App.css';
 
+
 function App() {
+
+  interface Iuser{
+    name: string;
+    login: string;
+    avatar_url :string
+  }
+
+  const [user , setUser] = useState<[Iuser]>()   //<[user]> Para setar uma tipagem de array
+  
+  const names = user
+
+  async function loadData(){
+    const response = await fetch('https://api.github.com/users/delei09')
+    const data = await response.json()
+    setUser(data)
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        {user?.name}
     </div>
   );
 }
